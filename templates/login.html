@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Login
+{% endblock title  %}
+
+{% block external %}
+
+{% endblock %}
+
+{% block content %}
+	<h3> Login </h3>
+	
+	<div class="container">
+	   	<div class="row">
+        	<div class="col-sm-6 col-md-4 col-md-offset-4">
+       		<form class="form-signin" name="LoginForm" action="/login/?next={{next}}" method="post">
+       		{% csrf_token %}
+	              <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+	              <input type="password" name="password" class="form-control" placeholder="Password" required>
+	              <button class="btn btn-lg btn-primary btn-block" type="submit">
+	              	login
+	              </button>
+         		</form>
+        	</div>
+    	</div>
+    
+		{% if error %}
+			<p class="help-block">Your login information is invalid</p>
+		{% endif %}
+
+
+<!-- 
+				
+			<div class="form-group" width="100px">
+				<label class="control-label" for="username">Username</label>
+			   	<input class="form-control" type="text" id="username" name="username"  placeholder="Enter user name">
+			</div>
+			<div class="form-group">
+			 	<label class="control-label" for="password">Password</label>
+			   	<input class="form-control" type="password" name="password" id="password" placeholder="Password">
+			</div>
+			<button type="submit" class="btn btn-default">Login</button>
+			
+		</form>
+-->
+	</div>
+
+{% endblock %}
