@@ -19,27 +19,27 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
 
-from alarms.views import *
+from alarms import views
 
-static = os.path.join (
-    os.path.dirname( __file__ ), 'static' )
+static = os.path.join ( os.path.dirname( __file__ ), 'static' )
 
 urlpatterns = [ 
 	# Administration
     url(r'^admin/', include(admin.site.urls)),
 
     # Alarm Management 
-    url(r'^$', home),
+    url(r'^$', views.home),
+    url(r'^alarms/', views.alarms_view),
 
     # Session Management
-    url(r'^login/$', login_view),
-    url(r'^logout/$', logout_view),
-    url(r'^signup/$', signup_view),
+    url(r'^login/$', views.login_view),
+    url(r'^logout/$', views.logout_view),
+    url(r'^signup/$', views.signup_view),
     url(r'^signup/success/$', TemplateView.as_view(
-            template_name='signup_success.html'),
-              name="home" ), 
-    
+            template_name='signup_success.html'), name="home" ), 
+     
     # Settings 
+    url(r'^settings/$', views.settings_view),
 
     # Media/Static
 	url(r'^static/(?P<path>.*)$', 'django.views.static.serve', 

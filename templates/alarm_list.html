@@ -1,0 +1,57 @@
+<!-- Ajax 폼으로 변경 필요 -->
+<div id="id_alarm_list">
+
+		<table id="monitoring_entires" class="table table-striped">
+			<thead>
+		      <tr>
+		        <th><span>Title</span></th>
+		        <th><span>URL</span></th>
+		        <th><span>Keyword</span></th>
+		        <th><span></span></th>
+		        <th><span></span></th>
+		      </tr>		
+			</thead>
+			<tbody>
+			{% if entries %}
+				{% for alarm in entries %}
+					<tr>
+						<td>
+							{{ alarm.title|escape }}
+						</td>
+						<td>
+							{{ alarm.site.url|escape }}
+						</td>
+						<td>
+							{{ alarm.keyword.text|escape }}
+						</td>
+						<td>
+							<button id="id_btn_edit_{{alarm.title}}" type="button" class="btn btn-default btn-xs" 
+							title={{alarm.title}} onclick="edit_click(this.title)">Edit</button>
+						</td>
+						<td>
+							<button id="id_btn_delete_{{alarm.title}}" type="button" class="btn btn-default btn-xs" 
+							title={{alarm.title}} onclick="delete_click(this.title)">Delete</button>
+						</td>
+						<td>
+							<div class="btn-group" id="id_alarm_btn_group">
+							   {% if alarm.activated == True %}
+							   <button type="button" id="id_btn_activate_{{alarm.title}}" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown">
+							    	Activate
+							   	 {% else %}
+							   <button type="button" id="id_btn_activate_{{alarm.title}}" class="btn btn-danger btn-xs dropdown-toggle" data-toggle="dropdown">
+							   	 	Decativate
+							   	 {% endif %}
+							    <span class="caret"></span>
+							  </button>
+							  <ul class="dropdown-menu" role="menu">
+							    <li><a href="#" name="{{alarm.title}}">Activate</a></li>
+							    <li><a href="#" name="{{alarm.title}}">Deactivate</a></li>
+							  </ul>
+							</div>						
+						</td>						
+					</tr>
+				{% endfor %}
+			{% endif %}					
+			</tbody>
+		</table>
+</div>

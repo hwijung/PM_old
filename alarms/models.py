@@ -32,7 +32,7 @@ class Sites(models.Model):
     
 class Settings(models.Model):
     # if alarm is turn on or off
-    activated = models.IntegerField
+    activated = models.IntegerField(default = 1)
     
     # Other notification options
     noti_email = models.BooleanField(default=True)

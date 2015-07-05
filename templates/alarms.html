@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block external %}
+	<script type="text/javascript" src="/static/js/helpers.js"></script>	
+	<script type="text/javascript" src="/static/js/alarms.js"></script>		
+{% endblock %}
+
+{% block title %}{{ username }}{% endblock %}
+
+{% block head %}Alarms for {{ username }}{% endblock %}
+
+{% block content %}
+	<h3> Alarms </h3>
+	{% include "alarm_list.html" %}
+	
+	{% if noa == 0  %}
+		<p>No alarm found.</p>
+	{% endif %} 		
+	
+	<button id="id_btn_create_entry" type="button" class="btn btn-default">
+	 	Create Entry
+	</button>		
+
+	<div id="dialog-confirm"></div>
+	
+{% endblock %}

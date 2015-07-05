@@ -5,8 +5,13 @@ from django.shortcuts import render, render_to_response, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+
 from alarms.forms import *
 from alarms.models import *
+import json 
 
 # Main View
 def home(request):
@@ -79,11 +84,53 @@ def alarms_view(request):
 	username = request.user.username
 	user = get_object_or_404 ( User, username = username )
 	 
-	entries = user.monitoringentry_set.order_by ( 'title' )
-	number_of_entries = len(entries)
-	settings = UserSetting.objects.get(user=user)
+	# get alarms of login user
+	my_alarms = Alarms.objects.filter( user = user )
 	
-	variables = RequestContext( request, { 'username': username, 'noe': number_of_entries, 'entries': entries, 'beat': settings.beat } )
+	# activated or not
+	try:
+		settings = Settings.objects.get( user = user )
+	except ObjectDoesNotExist:
+		settings = Settings.objects.create(user = user)
 	
-	return render_to_response('user_page.html', variables)
+	variables = RequestContext( request, { 'username': username, 'noa': 0, 'entries': my_alarms, 'activated': settings.activated } )
+	
+	return render_to_response('alarms.html', variables)
+
+# settings view
+@login_required
+def settings_view(request):
+	username = request.user.username
+   	user = get_object_or_404 ( User, username = username )
+   	
+	try:
+		settings = Settings.objects.get( user = user )
+	except ObjectDoesNotExist:
+		settings = Settings.objects.create(user = user)
+   	
+   	if request.method == 'POST':
+   		entry = request.POST['entry']
+   		if entry == "email":
+   			email = request.POST['email']
+   			
+   			# Email validation
+   			try:
+   				validate_email( email )
+   				user.email = email
+   				user.save()
+   				obj = { "result": "success" }
+   			except ValidationError:
+   				obj = { "result": "fail" }
+   			
+   			return HttpResponse( json.dumps(obj) )
+   		elif entry == "notification":
+   			method = request.POST['noti_method']
+   			checked = request.POST['checked']
+   		elif entry == "activation":
+   			activate = request.POST['activate']
+   			
+   			# Update Notification
+   	
+   	variables = RequestContext( request, { 'username': username, 'email': user.email, 'setting': settings } )
+   	return render_to_response( 'settings.html', variables ) 	
 	
