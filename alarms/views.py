@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -9,9 +8,32 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
+from django.db import IntegrityError
+
 from alarms.forms import *
 from alarms.models import *
+
+from common.PPparser import PPparser
+
 import json 
+import logging, logging.config
+import sys
+
+# Get an instance of a logger
+LOGGING = { 
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO'
+    }
+}
+logging.config.dictConfig(LOGGING)
 
 # Main View
 def home(request):
@@ -85,17 +107,46 @@ def alarms_view(request):
 	user = get_object_or_404 ( User, username = username )
 	 
 	# get alarms of login user
-	my_alarms = Alarms.objects.filter( user = user )
+	my_alarms = Alarm.objects.filter( user = user )
 	
 	# activated or not
 	try:
-		settings = Settings.objects.get( user = user )
+		setting = Setting.objects.get( user = user )
 	except ObjectDoesNotExist:
-		settings = Settings.objects.create(user = user)
+		setting = Setting.objects.create(user = user)
 	
-	variables = RequestContext( request, { 'username': username, 'noa': 0, 'entries': my_alarms, 'activated': settings.activated } )
+	variables = RequestContext( request, { 'username': username, 'noa': len(my_alarms), 'alarms': my_alarms, 'activated': setting.activated } )
 	
 	return render_to_response('alarms.html', variables)
+
+# alarm craete view
+@login_required
+def alarms_create_view(request):
+	ajax = request.GET.has_key ( 'ajax' )
+	variables = RequestContext( request, { 'username': request.user.username } )
+		
+	if request.method == 'POST':
+		
+		form = AlarmSaveForm ( request.POST )
+
+		if form.is_valid():
+			try:
+				Alarm.save_with_form(request.user, form)
+				return HttpResponseRedirect ( '/alarms/' )
+			
+			# duplicated Title exception
+			except IntegrityError as e:
+				return render_to_response( 'alarm_create.html',  
+										   { 'urls': PPparser.URLS.iteritems() },
+										   RequestContext( request, { 'username': request.user.username, 'error': True } ))
+
+	elif request.GET.has_key('url'):
+		url = request.GET['url']
+	else:
+		form = AlarmSaveForm()
+	
+	return render_to_response('alarm_create.html', { 'urls': PPparser.URLS.iteritems() }, context_instance = variables )
+	# return render_to_response( 'alarm_create.html', { 'urls': PpomppuParsor.URLS.iteritems() }, context_instance = variables )	
 
 # settings view
 @login_required
@@ -104,9 +155,9 @@ def settings_view(request):
    	user = get_object_or_404 ( User, username = username )
    	
 	try:
-		settings = Settings.objects.get( user = user )
+		settings = Setting.objects.get( user = user )
 	except ObjectDoesNotExist:
-		settings = Settings.objects.create(user = user)
+		settings = Setting.objects.create(user = user)
    	
    	if request.method == 'POST':
    		entry = request.POST['entry']

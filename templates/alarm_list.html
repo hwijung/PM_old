@@ -1,4 +1,4 @@
-<!-- Ajax 폼으로 변경 필요 -->
+<!-- -->
 <div id="id_alarm_list">
 
 		<table id="monitoring_entires" class="table table-striped">
@@ -12,17 +12,17 @@
 		      </tr>		
 			</thead>
 			<tbody>
-			{% if entries %}
-				{% for alarm in entries %}
+			{% if alarms %}
+				{% for alarm in alarms %}
 					<tr>
 						<td>
 							{{ alarm.title|escape }}
 						</td>
 						<td>
-							{{ alarm.site.url|escape }}
+							{{ alarm.site|escape }}
 						</td>
 						<td>
-							{{ alarm.keyword.text|escape }}
+							{{ alarm.keyword|escape }}
 						</td>
 						<td>
 							<button id="id_btn_edit_{{alarm.title}}" type="button" class="btn btn-default btn-xs" 

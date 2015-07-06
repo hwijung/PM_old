@@ -26,10 +26,11 @@ static = os.path.join ( os.path.dirname( __file__ ), 'static' )
 urlpatterns = [ 
 	# Administration
     url(r'^admin/', include(admin.site.urls)),
-
+ 
     # Alarm Management 
     url(r'^$', views.home),
-    url(r'^alarms/', views.alarms_view),
+    url(r'^alarms/$', views.alarms_view),
+    url(r'^alarms/create/$', views.alarms_create_view),
 
     # Session Management
     url(r'^login/$', views.login_view),
