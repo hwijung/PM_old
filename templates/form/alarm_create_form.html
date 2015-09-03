@@ -1,9 +1,10 @@
 <form id="save-form" method="post" action="/alarms/create/">{% csrf_token %}
 
 	<div class="form-group">   	 
-    	<label class="control-label" for="title">Title</label>
+		<label class="control-label" for="title">Title</label>
        <input class="form-control" type="text" name="title"  
-       		placeholder="Enter a name of entry">
+       		placeholder="Enter a name of entry, only use characters and underbar.">
+		{{ form.title.errors }}       		
 	</div>
 	
 	<!-- 
@@ -21,19 +22,17 @@
 	   			<option> {{ key }}: {{ value }} </option>
 	   		{% endfor %}
 	   	</select>
+	   	{{ form.site.errors }}   
 	</div>   	
    	
    	<div class="form-group">
     	<label class="control-label" for="keyword">keyword</label>
        <input class="form-control" type="text" name="keyword" 
-       		placeholder="Enter keywords you want to monitor">
+       		placeholder="Enter keywords you want to monitor, use comma for multiple words">
+       {{ form.keyword.errors }}
    	</div>	   	   	
 
 	<button type="submit" class="btn btn-default">Add</button>
 	<button id="id_cancel" type="button" class="btn btn-default" onclick="window.location.replace('/alarms/')" >Cancel</button>	
 
-   {% if error %}
-   	  	<p class="help-block">Your Title is duplicated.</p>
-   {% endif %}
-        
 </form>

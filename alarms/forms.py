@@ -39,13 +39,13 @@ class RegistrationForm ( forms.Form ):
             raise forms.ValidationError ( 'Passwords do not match.' )
         
 class AlarmSaveForm ( forms.Form ):
-    title = forms.CharField ( label = 'Title', widget = forms.TextInput ( attrs = { 'size': 32 }))
+    title = forms.SlugField ( label = 'Title', widget = forms.TextInput ( attrs = { 'size': 32 }))
     site = forms.CharField ( label = 'Site', widget = forms.TextInput ( attrs = { 'size': 128 }))
     # activated = forms.BooleanField( label = 'Activated' )
     keyword = forms.CharField ( label = 'Keyword', widget = forms.TextInput ( attrs = { 'size': 32 }))
     
 class AlarmEditForm ( forms.Form ):
-    title = forms.CharField ( label = 'Title', widget = forms.TextInput ( attrs = { 'size': 32 }))
+    title = forms.SlugField ( label = 'Title', widget = forms.TextInput ( attrs = { 'size': 32 }))
     site = forms.CharField ( label = 'Site', widget = forms.TextInput ( attrs = { 'size': 128 }))
     # activated = forms.BooleanField( label = 'Activated' )
     keyword = forms.CharField ( label = 'Keyword', widget = forms.TextInput ( attrs = { 'size': 32 }))

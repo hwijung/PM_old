@@ -1,7 +1,7 @@
 <!-- -->
 <div id="id_alarm_list">
 
-		<table id="monitoring_entires" class="table table-striped">
+		<table id="id_alarm" class="table table-striped">
 			<thead>
 		      <tr>
 		        <th><span>Title</span></th>
@@ -22,7 +22,7 @@
 							{{ alarm.site|escape }}
 						</td>
 						<td>
-							{{ alarm.keyword|escape }}
+							{{ alarm.searchword_str|escape }}
 						</td>
 						<td>
 							<button id="id_btn_edit_{{alarm.title}}" type="button" class="btn btn-default btn-xs" 

@@ -24,14 +24,17 @@ from alarms import views
 static = os.path.join ( os.path.dirname( __file__ ), 'static' )
 
 urlpatterns = [ 
-	# Administration
+	# Administration 
     url(r'^admin/', include(admin.site.urls)),
  
     # Alarm Management 
     url(r'^$', views.home),
     url(r'^alarms/$', views.alarms_view),
-    url(r'^alarms/create/$', views.alarms_create_view),
+    url(r'^alarms/create/$', views.alarm_create_view),
+    url(r'^alarms/activate/$', views.alarm_activate),    
+    url(r'^alarms/([\w ]+)/$', views.alarm_view),
 
+   
     # Session Management
     url(r'^login/$', views.login_view),
     url(r'^logout/$', views.logout_view),

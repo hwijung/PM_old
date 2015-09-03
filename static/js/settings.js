@@ -3,7 +3,6 @@ $(document).ready( function()
 	$(".btn-group ul li a").click(function() {
 	
 		$("#id_btn_activate").contents().get(0).nodeValue = $(this).text() + " ";
-		
 		if ( $(this).text() == "Activate" ) {
 			$("#id_btn_activate").addClass( "btn-success" );
 			$("#id_btn_activate").removeClass( "btn-danger" );
@@ -34,7 +33,7 @@ $(document).ready( function()
 				return xhrobj;
 			},
 			url: requestURL,
-			headers: { "X-CSRFToken": getCookie('csrftoken') },
+			headers: { "X-CSRFToken": $.cookie('csrftoken') },
 			type: "POST",
 			cache: false,
 			data: { entry:'email', email: email },
@@ -58,7 +57,7 @@ function toggleCheckbox( checkbox, on ) {
 			return xhrobj;
 		}, 
 		url: requestURL,
-       headers: { "X-CSRFToken": getCookie('csrftoken') },		
+       headers: { "X-CSRFToken": $.cookie('csrftoken') },		
        type: "POST",	
        cache: false,
        data: { entry:'notification', noti_method: checkbox, checked: on },   
@@ -76,7 +75,7 @@ function toggleBeat( on ) {
 			return xhrobj;
 		}, 
 		url: requestURL,
-       headers: { "X-CSRFToken": getCookie('csrftoken') },		
+       headers: { "X-CSRFToken": $.cookie('csrftoken') },		
        type: "POST",	
        cache: false,
        data: { entry:'activation', activate: on },   
